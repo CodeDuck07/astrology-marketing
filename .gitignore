@@ -1,0 +1,10 @@
+.env
+posts.db
+.venv/
+__pycache__/
+*.pyc
+
+# учебники — только локально (см. materials/README.md)
+materials/**
+!materials/.gitkeep
+!materials/README.md
