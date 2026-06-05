@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Пост #{{ post.id }} — Astrology Admin{% endblock %}
+{% block content %}
+<p><a href="/">← К списку</a></p>
+<h1>Пост #{{ post.id }}</h1>
+
+{% if saved %}
+<div class="msg-ok">Сохранено в базе{% if post.vk_post_id and not vk_error %} и отправлено в VK{% endif %}.</div>
+{% endif %}
+{% if vk_error %}
+<div class="msg-err">
+  {% if vk_error == "empty" %}
+  Текст поста не может быть пустым.
+  {% else %}
+  База обновлена, но VK вернул ошибку: {{ vk_error }}
+  {% endif %}
+</div>
+{% endif %}
+
+<div class="card">
+  <div class="meta">
+    <span><strong>Тема:</strong> {{ theme }}</span>
+    <span><strong>Дата:</strong> {{ date }}</span>
+    <span><strong>Источник:</strong> materials/{{ post.source_file }}</span>
+    {% if post.vk_post_id %}
+    <span><strong>VK:</strong>
+      {% if vk_url %}
+      <a href="{{ vk_url }}" target="_blank" rel="noopener">{{ post.vk_post_id }}</a>
+      {% else %}
+      {{ post.vk_post_id }}
+      {% endif %}
+    </span>
+    {% endif %}
+  </div>
+
+  <form method="post" action="/post/{{ post.id }}">
+    <p><textarea name="post_text" required>{{ post.post_text }}</textarea></p>
+    <p><button class="btn" type="submit">Сохранить</button></p>
+  </form>
+</div>
+{% endblock %}

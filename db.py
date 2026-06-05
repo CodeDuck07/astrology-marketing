@@ -104,3 +104,42 @@ def save_publication(
                 scheduled_for,
             ),
         )
+
+
+def list_published_posts() -> list[dict]:
+    init_db()
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            """
+            SELECT id, source_file, post_text, vk_post_id, published_at, scheduled_for
+            FROM published
+            ORDER BY id DESC
+            """
+        ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def get_published_post(post_id: int) -> dict | None:
+    init_db()
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        row = conn.execute(
+            """
+            SELECT id, source_file, post_text, vk_post_id, published_at, scheduled_for
+            FROM published
+            WHERE id = ?
+            """,
+            (post_id,),
+        ).fetchone()
+    return dict(row) if row else None
+
+
+def update_post_text(post_id: int, post_text: str) -> bool:
+    init_db()
+    with sqlite3.connect(DB_PATH) as conn:
+        cur = conn.execute(
+            "UPDATE published SET post_text = ? WHERE id = ?",
+            (post_text, post_id),
+        )
+    return cur.rowcount > 0

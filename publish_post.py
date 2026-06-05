@@ -87,6 +87,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="запланировать без вопроса да/нет (для cron на VPS)",
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="игнорировать день недели (для теста): завтра 12:00 МСК",
+    )
     return parser.parse_args()
 
 
@@ -94,10 +99,13 @@ def main() -> int:
     args = parse_args()
 
     try:
-        publish_dt = scheduled_publish_time()
+        publish_dt = scheduled_publish_time(force=args.force)
     except WrongWeekdayError as exc:
         print(exc)
         return 1
+
+    if args.force:
+        print("(режим --force: день недели игнорируется, пост на завтра 12:00 МСК)")
 
     publish_ts = int(publish_dt.timestamp())
     when_label = schedule_label(publish_dt)

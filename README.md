@@ -22,6 +22,7 @@ VK_TOKEN=ваш_токен_сообщества
 VK_GROUP_ID=223386386
 OPENAI_API_KEY=ваш_ключ
 OPENAI_BASE_URL=https://api.proxyapi.ru/openai/v1
+ADMIN_PASSWORD=ваш_пароль_админки
 ```
 
 2. Установите зависимости:
@@ -147,6 +148,19 @@ python3 publish_post.py
 python3 publish_post.py --auto
 ```
 
+### admin_app.py — веб-админка
+
+Просмотр и правка постов из `posts.db`. При сохранении текст обновляется в SQLite; если у поста есть `vk_post_id`, вызывается `wall.edit` в VK.
+
+Добавьте в `.env` пароль `ADMIN_PASSWORD`. Шаблон переменных — `.env.example`.
+
+```bash
+cd "/path/to/astrology_marketing"
+uvicorn admin_app:app --port 8001
+```
+
+Откройте http://127.0.0.1:8001 — вход по паролю из `.env`.
+
 ## Cron на VPS
 
 Скопируйте проект на сервер, настройте `.env`, затем `crontab -e`:
@@ -184,6 +198,8 @@ astrology_marketing/
 ├── test_vk.py
 ├── generate_post.py
 ├── publish_post.py
+├── admin_app.py
+├── templates/
 ├── schedule.py
 └── db.py
 ```

@@ -2,3 +2,7 @@ python-dotenv
 requests
 openai
 pymupdf
+fastapi
+uvicorn[standard]
+jinja2
+python-multipart

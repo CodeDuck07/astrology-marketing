@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Вход — Astrology Admin{% endblock %}
+{% block content %}
+<h1>Вход в админку</h1>
+<div class="card" style="max-width: 360px;">
+  {% if error %}
+  <div class="msg-err">Неверный пароль</div>
+  {% endif %}
+  <form method="post" action="/login">
+    <p><label>Пароль<br><input type="password" name="password" autofocus required></label></p>
+    <p><button class="btn" type="submit">Войти</button></p>
+  </form>
+</div>
+{% endblock %}

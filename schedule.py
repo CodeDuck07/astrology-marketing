@@ -17,8 +17,20 @@ class WrongWeekdayError(Exception):
     """Запуск не во вторник и не в субботу."""
 
 
-def scheduled_publish_time(now: datetime | None = None) -> datetime:
+def scheduled_publish_time(now: datetime | None = None, *, force: bool = False) -> datetime:
     now = (now or datetime.now(MSK)).astimezone(MSK)
+    if force:
+        target_date = now.date() + timedelta(days=1)
+        return datetime(
+            target_date.year,
+            target_date.month,
+            target_date.day,
+            12,
+            0,
+            0,
+            tzinfo=MSK,
+        )
+
     rule = SCHEDULE_DAYS.get(now.weekday())
     if not rule:
         today = WEEKDAYS_RU[now.weekday()]
